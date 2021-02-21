@@ -19,13 +19,14 @@ func TodoListAPI() http.Handler {
 func getTodoLists(w http.ResponseWriter, r *http.Request) {
 	lists, err := db.GetTodoLists()
 	if err != nil {
-		log.Println("internal err : ", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(struct {
-			Error string
-		} {
-			Error: "Internal Error",
-		})
+		writeInternalError(w, err)
+		return
 	}
 	json.NewEncoder(w).Encode(lists)
+}
+
+func writeInternalError(w http.ResponseWriter, err error) {
+	log.Println("Internal error : ", err)
+	w.WriteHeader(http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(errorResponse{"Internal Error"})
 }
