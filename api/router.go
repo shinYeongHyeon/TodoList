@@ -17,6 +17,8 @@ func TodoListAPI() http.Handler {
 
 	router.HandleFunc("/list", createTodoList).Methods(http.MethodPost)
 
+	router.HandleFunc("/list/{list_id}", renameTodoList).Methods(http.MethodPut)
+
 	log.Info("Server Up Complete...")
 
 	return router
