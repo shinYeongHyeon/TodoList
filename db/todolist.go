@@ -128,3 +128,24 @@ func CreateTodoItem(listID int, text string, done bool) (item todo.Item, err err
 	done).Scan(&item.ID)
 	return
 }
+
+// ModifyTodoItem modifies a todo item
+func ModifyTodoItem(listID, itemID int, text string, done bool) error {
+	res, err := db.Exec(`
+	UPDATE todo_item
+	SET text = $1, done = $2
+	WHERE id = $3 AND todo_list_id = $4`,
+	text,
+	done,
+	itemID,
+	listID)
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected, err := res.RowsAffected(); err != nil || rowsAffected == 0 {
+		return ErrNotFound
+	}
+
+	return nil
+}
