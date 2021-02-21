@@ -37,3 +37,8 @@ func renameTodoList(w http.ResponseWriter, r *http.Request) {
 	must(err)
 	writeJSON(w, list)
 }
+
+func deleteTodoList(w http.ResponseWriter, r *http.Request) {
+	listID := parseIntParam(r, "list_id")
+	must(db.DeleteTodoList(listID))
+}

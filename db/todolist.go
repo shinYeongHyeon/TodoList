@@ -99,3 +99,18 @@ func RenameTodoList(id int, newName string) error {
 
 	return nil
 }
+
+// DeleteTodoList deletes a todo list
+func DeleteTodoList(id int) error {
+	res, err := db.Exec(`
+	DELETE FROM todo_list WHERE id = $1`, id)
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected, err := res.RowsAffected(); err != nil || rowsAffected == 0 {
+		return ErrNotFound
+	}
+
+	return nil
+}
