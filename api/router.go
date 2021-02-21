@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/labstack/gommon/log"
 	"github.com/shinYeongHyeon/TodoList/db"
+	"github.com/shinYeongHyeon/TodoList/todo"
 	"net/http"
 )
 
@@ -14,6 +15,7 @@ func TodoListAPI() http.Handler {
 	router.Use(handlePanic)
 
 	router.HandleFunc("/lists", getTodoLists).Methods(http.MethodGet)
+	router.HandleFunc("/list", createTodoList).Methods(http.MethodPost)
 
 	log.Info("Server Up Complete...")
 
@@ -26,4 +28,12 @@ func getTodoLists(w http.ResponseWriter, r *http.Request) {
 
 	must(err)
 	writeJSON(w, lists)
+}
+
+func createTodoList(w http.ResponseWriter, r *http.Request) {
+	var req todo.List
+	parseJSON(r.Body, &req)
+	todoList, err := db.CreateTodoList(req.Name)
+	must(err)
+	writeJSON(w, todoList)
 }
