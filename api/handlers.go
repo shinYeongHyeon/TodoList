@@ -60,3 +60,9 @@ func modifyTodoItem(w http.ResponseWriter, r *http.Request) {
 	parseJSON(r.Body, &req)
 	must(db.ModifyTodoItem(listID, itemID, req.Text, req.Done))
 }
+
+func deleteTodoItem(w http.ResponseWriter, r *http.Request) {
+	listID := parseIntParam(r, "list_id")
+	itemID := parseIntParam(r, "item_id")
+	must(db.DeleteTodoItem(listID, itemID))
+}
