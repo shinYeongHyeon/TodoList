@@ -114,3 +114,17 @@ func DeleteTodoList(id int) error {
 
 	return nil
 }
+
+// CreateTodoItem creates a new todo item
+func CreateTodoItem(listID int, text string, done bool) (item todo.Item, err error) {
+	item.Text = text
+	item.Done = done
+	err = db.QueryRow(`
+	INSERT INTO todo_item
+	    (todo_list_id, text, done)
+	VALUES ($1, $2, $3) RETURNING id`,
+	listID,
+	text,
+	done).Scan(&item.ID)
+	return
+}

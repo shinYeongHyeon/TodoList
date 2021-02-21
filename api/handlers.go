@@ -42,3 +42,13 @@ func deleteTodoList(w http.ResponseWriter, r *http.Request) {
 	listID := parseIntParam(r, "list_id")
 	must(db.DeleteTodoList(listID))
 }
+
+func createTodoItem(w http.ResponseWriter, r *http.Request) {
+	listID := parseIntParam(r, "list_id")
+	var req todo.Item
+	parseJSON(r.Body, &req)
+
+	item, err := db.CreateTodoItem(listID, req.Text, req.Done)
+	must(err)
+	writeJSON(w, item)
+}
