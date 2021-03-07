@@ -150,6 +150,24 @@ func ModifyTodoItem(listID, itemID int, text string, done bool) error {
 	return nil
 }
 
+func DoneTodoItem(listID, itemID int) error {
+	res, err := db.Exec(`
+	UPDATE todo_item
+	SET done = true
+	WHERE id = $1 AND todo_list_id = $2`,
+		itemID,
+		listID)
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected, err := res.RowsAffected(); err != nil || rowsAffected == 0 {
+		return ErrNotFound
+	}
+
+	return nil
+}
+
 // DeleteTodoItem deletes a todo item
 func DeleteTodoItem(listID, itemID int) error {
 	res, err := db.Exec(`

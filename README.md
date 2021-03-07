@@ -2,5 +2,6 @@
 
 ### Todo
 -[x] Basic Functions
--[ ] Just Done Process
+-[x] Just Done Process  
+-[ ] Fix Not Exist Todo Item  
 -[ ] Apply ORM System
